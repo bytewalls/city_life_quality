@@ -1,7 +1,6 @@
 # city_life_quality
 
-> An app with existing API integrations to look at quality of life in various cities and compare them
-
+> A simple VueJs app for finding and comparing various cities. 
 ## Build Setup
 
 ``` bash
