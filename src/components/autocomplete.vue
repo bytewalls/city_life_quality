@@ -1,3 +1,15 @@
+<documentation>
+Name: autocomplete
+
+Props:
+  - onSelect: function which will be called when an item is selected, passed the item
+  - itemLabel: function which will be called with a given item for a label. 
+               Expects a returned object of form { main, sub } with the sub label being optional
+  - query: async function, passed a search term should return a list of items
+  - placeholder: string, optional. Placeholder text for the search
+  - listClass: string, optional. Use to overwrite styling of the list
+</documentation>
+
 <template>
   <div class="autocomplete">
     <input type="text"
@@ -7,7 +19,7 @@
            @focus="onFocus"
            @blur="onBlur"
            autocomplete="off">
-    <div class="autocomplete-results" v-if="showList && list.length">
+    <div :class="[listClass ? listClass : 'autocomplete-results']" v-if="showList && list.length">
       <ul>
         <li v-for="item in list" @click="selectItem(item)">
          {{ itemLabel(item).main }} <span ng-if="itemLabel(item).sub">- {{itemLabel(item).sub}}</span>
@@ -21,13 +33,26 @@
 
 export default {
   name: 'autocomplete',
-  props: [
-    'onSelect',
-    'placeholder',
-    'itemLabel',
-    'listClass',
-    'query',
-  ],
+  props: {
+    onSelect: {
+      type: Function,
+      required: true,
+    },
+    itemLabel: {
+      type: Function,
+      required: true,
+    },
+    query: {
+      type: Function,
+      required: true,
+    },
+    placeholder: {
+      type: String,
+    },
+    listClass: {
+      type: String,
+    },
+  },
   data () {
     return {
       list: [],
@@ -64,7 +89,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.city-autocomplete {
+.autocomplete {
   width: 400px;
   margin: auto;
 
