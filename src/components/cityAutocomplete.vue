@@ -1,27 +1,25 @@
 <template>
+
   <div class="city-autocomplete">
-    <input type="text"
-           placeholder="Search for city here..."
-           v-model="searchTerm"
-           @input="onInput"
-           @focus="onFocus"
-           @blur="onBlur"
-           autocomplete="off">
-    <div class="autocomplete-results" v-if="showList && cities.length">
-      <ul>
-        <li v-for="city in cities" @click="selectCity(city)">
-         {{city.shortName || city.longName}} <span v-if="city.shortName">- {{city.longName}}</span>
-        </li>
-      </ul>
-    </div>
+    <autocomplete
+      placeholder="Search for city here..."
+      :onSelect="selectCity"
+      :query="searchForCity"
+      :itemLabel="labelForCity"
+      listClass="autocomplete-results">
+    </autocomplete>
   </div>
 </template>
 
 <script>
 import teleportAPI from '../services/teleportAPI';
+import autocomplete from './autocomplete';
 
 export default {
   name: 'cityAutocomplete',
+  components: {
+    autocomplete,
+  },
   data () {
     return {
       cities: [],
@@ -32,29 +30,15 @@ export default {
   methods: {
     selectCity (city) {
       console.log(city);
-      this.searchTerm = city.shortName || city.longName;
-      this.showList = false;
     },
-    onInput () {
-      if (this.searchTerm.length) {
-        teleportAPI.findCities(this.searchTerm).then((result) => {
-          this.cities = result;
-          this.showList = true;
-        });
-      } else {
-        this.cities = [];
-        this.showList = false;
-      }
+    async searchForCity (searchTerm) {
+      return teleportAPI.findCities(searchTerm);
     },
-    onFocus () {
-      if (this.cities.length) {
-        this.showList = true;
-      }
-    },
-    onBlur () {
-      // setTimeout(() => {
-      //   this.showList = false;
-      // }, 10);
+    labelForCity (city) {
+      return {
+        main: city.shortName || city.longName,
+        sub: city.longName,
+      };
     },
   },
 };
