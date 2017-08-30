@@ -1,13 +1,11 @@
 import axios from 'axios';
 
-const alternateName = (alternateNames, searchTerm) => {
-  if (!alternateNames.length) {
+const alternateName = (names, searchTerm) => {
+  if (!names.length) {
     return null;
   }
 
-  const matchingName = alternateNames.find((c) => c.name === searchTerm);
-
-  return matchingName ? matchingName.name : alternateNames[0].name;
+  return names.find((c) => c.name === searchTerm) || names[0].name;
 };
 
 const getLinkData = async (link, params = null) => (
