@@ -11,28 +11,25 @@
 </template>
 
 <script>
-import teleportAPI from '../services/teleportAPI';
-import autocomplete from './autocomplete';
+import { mapState } from 'vuex';
+
+import { findCities } from '../services/teleportAPI';
+import autocomplete from './common/autocomplete';
 
 export default {
   name: 'cityAutocomplete',
   components: {
     autocomplete,
   },
-  data () {
-    return {
-      cities: [],
-      searchTerm: '',
-      showList: false,
-    };
-  },
+  computed: mapState([
+    'city',
+  ]),
   methods: {
     selectCity (city) {
-      // TODO: Add logic to actually select the city. Should interact with vuex
-      console.log(city);
+      this.$store.dispatch('loadCity', city.link);
     },
     async searchForCity (searchTerm) {
-      return teleportAPI.findCities(searchTerm);
+      return findCities(searchTerm);
     },
     labelForCity (city) {
       return {

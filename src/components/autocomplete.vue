@@ -65,6 +65,7 @@ export default {
       this.onSelect(item);
       this.searchTerm = this.itemLabel(item).main;
       this.showList = false;
+      this.list = [];
     },
     async onInput () {
       if (this.searchTerm.length) {

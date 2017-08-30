@@ -38,5 +38,6 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'space-before-function-paren': ['error', 'always'],
     'no-underscore-dangle': 'off',
+    'no-param-reassign': 'off'
   }
 }

@@ -10,6 +10,10 @@ const alternateName = (alternateNames, searchTerm) => {
   return matchingName ? matchingName.name : alternateNames[0].name;
 };
 
+const getLinkData = async (link, params = null) => (
+  axios.get(link, params).then((result) => result.data)
+);
+
 const cityBuilder = (city, searchTerm) => (
   {
     shortName: alternateName(city.matching_alternate_names, searchTerm),
@@ -18,22 +22,35 @@ const cityBuilder = (city, searchTerm) => (
   }
 );
 
-const findCities = (search) => (
-  axios.get('https://api.teleport.org/api/cities', {
+const findCities = async (search) => {
+  const data = await getLinkData('https://api.teleport.org/api/cities', {
     params: {
       search,
     },
-  }).then((result) => (
-    result
-      .data
+  });
+
+  return data
       ._embedded['city:search-results']
-      .map((city) => cityBuilder(city, search))
-  ))
-);
+      .map((city) => cityBuilder(city, search));
+};
 
-const cityInformation = (link) => axios.get(link);
+const getCityData = async (link) => {
+  const city = await getLinkData(link);
+  const urban = await getLinkData(city._links['city:urban_area'].href);
+  const details = await getLinkData(urban._links['ua:details'].href);
+  const salaries = await getLinkData(urban._links['ua:salaries'].href);
+  const scores = await getLinkData(urban._links['ua:scores'].href);
 
-export default {
+  return {
+    city,
+    urban,
+    details,
+    salaries,
+    scores,
+  };
+};
+
+export {
   findCities,
-  cityInformation,
+  getCityData,
 };
