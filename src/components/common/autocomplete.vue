@@ -94,7 +94,6 @@ export default {
   width: 400px;
   margin: auto;
 
-
   input[type=text] {
     width: 100%;
     height: 30px;
