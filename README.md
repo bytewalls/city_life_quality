@@ -1,6 +1,7 @@
 # city_life_quality
 
-> A simple VueJs app for finding and comparing various cities. 
+> A simple VueJs app, playing around with what Vue offers and some open API's with city data. (Currently only using the teleport API)
+
 ## Build Setup
 
 ``` bash
